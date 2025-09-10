@@ -7,13 +7,21 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { selectFilters, selectUniqueAssignees } from '../../features/tasks/tasksSelectors';
 import { setFilter, clearFilters } from '../../features/tasks/tasksSlice';
+import { useColorModeValue } from '../ui/color-mode';
 
 const TaskFilters: React.FC = () => {
   const dispatch = useDispatch();
   const filters = useSelector(selectFilters);
   const assignees = useSelector(selectUniqueAssignees);
-  const bgColor = 'white';
-  const borderColor = 'gray.200';
+  
+  // Color mode values
+  const bgColor = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const textColor = useColorModeValue('gray.700', 'gray.200');
+  const labelColor = useColorModeValue('gray.600', 'gray.300');
+  const selectBgColor = useColorModeValue('white', 'gray.700');
+  const selectBorderColor = useColorModeValue('#e2e8f0', '#4a5568');
+  const selectTextColor = useColorModeValue('gray.900', 'gray.100');
 
   // Debounced filter change effect
   useEffect(() => {
@@ -48,13 +56,13 @@ const TaskFilters: React.FC = () => {
       boxShadow="sm"
     >
       <Box display="flex" flexDirection="column" gap={4}>
-        <Text fontSize="lg" fontWeight="semibold" color="gray.700">
+        <Text fontSize="lg" fontWeight="semibold" color={textColor}>
           Filter Tasks
         </Text>
         
         <Box display="flex" gap={4} flexWrap="wrap">
           <Box minW="200px">
-            <Text fontSize="sm" fontWeight="medium" mb={2} color="gray.600">
+            <Text fontSize="sm" fontWeight="medium" mb={2} color={labelColor}>
               Status
             </Text>
             <select
@@ -63,9 +71,10 @@ const TaskFilters: React.FC = () => {
               style={{
                 padding: '8px 12px',
                 fontSize: '14px',
-                border: '1px solid #e2e8f0',
+                border: `1px solid ${selectBorderColor}`,
                 borderRadius: '6px',
-                backgroundColor: 'white',
+                backgroundColor: selectBgColor,
+                color: selectTextColor,
                 width: '100%'
               }}
             >
@@ -77,7 +86,7 @@ const TaskFilters: React.FC = () => {
           </Box>
 
           <Box minW="200px">
-            <Text fontSize="sm" fontWeight="medium" mb={2} color="gray.600">
+            <Text fontSize="sm" fontWeight="medium" mb={2} color={labelColor}>
               Assignee
             </Text>
             <select
@@ -86,9 +95,10 @@ const TaskFilters: React.FC = () => {
               style={{
                 padding: '8px 12px',
                 fontSize: '14px',
-                border: '1px solid #e2e8f0',
+                border: `1px solid ${selectBorderColor}`,
                 borderRadius: '6px',
-                backgroundColor: 'white',
+                backgroundColor: selectBgColor,
+                color: selectTextColor,
                 width: '100%'
               }}
             >

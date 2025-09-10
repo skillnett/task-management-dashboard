@@ -9,6 +9,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { updateTaskStatusRequest } from '../../features/tasks/tasksSlice';
 import { Task } from '../../api/tasksApi';
+import { useColorModeValue } from '../ui/color-mode';
 
 interface TaskCardProps {
   task: Task;
@@ -16,8 +17,16 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const dispatch = useDispatch();
-  const cardBg = 'white';
-  const borderColor = 'gray.200';
+  
+  // Color mode values
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const textColor = useColorModeValue('gray.700', 'gray.200');
+  const labelColor = useColorModeValue('gray.600', 'gray.300');
+  const dividerColor = useColorModeValue('gray.200', 'gray.600');
+  const selectBgColor = useColorModeValue('white', 'gray.700');
+  const selectBorderColor = useColorModeValue('#e2e8f0', '#4a5568');
+  const selectTextColor = useColorModeValue('gray.900', 'gray.100');
 
   const getPriorityColor = (priority: Task['priority']): string => {
     const colors: Record<Task['priority'], string> = {
@@ -64,7 +73,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
     >
       <Box pb={2}>
         <Box display="flex" flexDirection="column" gap={2}>
-          <Heading size="md" color="gray.700">
+          <Heading size="md" color={textColor}>
             {task.title}
           </Heading>
           <Box display="flex" gap={2} flexWrap="wrap">
@@ -92,15 +101,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
       <Box pt={0}>
         <Box display="flex" flexDirection="column" gap={3}>
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color={labelColor}>
             <strong>Assignee:</strong> {task.assignee}
           </Text>
           
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color={labelColor}>
             <strong>Due Date:</strong>{' '}
             <Text
               as="span"
-              color={isOverdue(task.dueDate) ? 'red.500' : 'gray.600'}
+              color={isOverdue(task.dueDate) ? 'red.500' : labelColor}
               fontWeight={isOverdue(task.dueDate) ? 'bold' : 'normal'}
             >
               {new Date(task.dueDate).toLocaleDateString()}
@@ -108,10 +117,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             </Text>
           </Text>
 
-          <Box height="1px" bg="gray.200" />
+          <Box height="1px" bg={dividerColor} />
 
           <Box w="100%">
-            <Text fontSize="sm" fontWeight="medium" mb={2}>
+            <Text fontSize="sm" fontWeight="medium" mb={2} color={textColor}>
               Update Status:
             </Text>
             <Box display="flex" gap={2}>
@@ -122,9 +131,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                 style={{
                   padding: '6px 12px',
                   fontSize: '14px',
-                  border: '1px solid #e2e8f0',
+                  border: `1px solid ${selectBorderColor}`,
                   borderRadius: '6px',
-                  backgroundColor: 'white',
+                  backgroundColor: selectBgColor,
+                  color: selectTextColor,
                   minWidth: '120px'
                 }}
               >

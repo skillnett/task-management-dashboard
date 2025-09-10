@@ -14,6 +14,7 @@ import { fetchTasksRequest, clearError } from '../../features/tasks/tasksSlice';
 import TaskFilters from './TaskFilters';
 import TaskList from './TaskList';
 import ErrorBoundary from './ErrorBoundary';
+import { useColorMode, useColorModeValue } from '../ui/color-mode';
 
 const TaskDashboard: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,12 +23,15 @@ const TaskDashboard: React.FC = () => {
   
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showStats, setShowStats] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { colorMode, toggleColorMode } = useColorMode();
   const toggleStats = () => setShowStats(!showStats);
-  const toggleColorMode = () => setIsDarkMode(!isDarkMode);
   
-  const bgColor = isDarkMode ? 'gray.900' : 'gray.50';
-  const headerBg = isDarkMode ? 'gray.800' : 'white';
+  const bgColor = useColorModeValue('gray.50', 'gray.900');
+  const headerBg = useColorModeValue('white', 'gray.800');
+  const textColor = useColorModeValue('gray.700', 'gray.200');
+  const labelColor = useColorModeValue('gray.600', 'gray.300');
+  const dividerColor = useColorModeValue('gray.200', 'gray.600');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
 
   useEffect(() => {
     dispatch(fetchTasksRequest());
@@ -48,16 +52,19 @@ const TaskDashboard: React.FC = () => {
         <Container maxW="container.xl" py={8}>
           <Box display="flex" flexDirection="column" gap={8}>
             {/* Header */}
-            <Box
-              bg={headerBg}
-              p={6}
-              borderRadius="lg"
-              boxShadow="sm"
-              borderWidth="1px"
-              borderColor="gray.200"
-            >
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-                <Heading size="lg" color="gray.700">
+              <Box
+                bg={headerBg}
+                p={6}
+                borderRadius="lg"
+                boxShadow="sm"
+                borderWidth="1px"
+                borderColor={borderColor}
+                position="sticky"
+                top={4}
+                zIndex={1}
+              >
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Heading size="lg" color={textColor}>
                   Task Management Dashboard
                 </Heading>
                 <Box display="flex" gap={2}>
@@ -73,9 +80,9 @@ const TaskDashboard: React.FC = () => {
                     onClick={toggleColorMode}
                     variant="outline"
                     size="sm"
-                    title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+                    title={`Switch to ${colorMode === 'dark' ? 'light' : 'dark'} mode`}
                   >
-                    {isDarkMode ? '☀️' : '🌙'}
+                    {colorMode === 'dark' ? '☀️' : '🌙'}
                   </IconButton>
                   <Button
                     size="sm"
@@ -91,28 +98,28 @@ const TaskDashboard: React.FC = () => {
               {/* Stats Section */}
               {showStats && (
                 <>
-                  <Box height="1px" bg="gray.200" mb={4} />
+                  <Box height="1px" mt={4} bg={dividerColor} mb={4} />
                   <Box display="flex" gap={6} flexWrap="wrap">
                     <Box display="flex" flexDirection="column" gap={1}>
-                      <Text fontSize="sm" color="gray.600">Total Tasks</Text>
+                      <Text fontSize="sm" color={labelColor}>Total Tasks</Text>
                       <Badge colorScheme="blue" fontSize="md" px={3} py={1}>
                         {stats.total}
                       </Badge>
                     </Box>
                     <Box display="flex" flexDirection="column" gap={1}>
-                      <Text fontSize="sm" color="gray.600">To Do</Text>
+                      <Text fontSize="sm" color={labelColor}>To Do</Text>
                       <Badge colorScheme="gray" fontSize="md" px={3} py={1}>
                         {stats.todo}
                       </Badge>
                     </Box>
                     <Box display="flex" flexDirection="column" gap={1}>
-                      <Text fontSize="sm" color="gray.600">In Progress</Text>
+                      <Text fontSize="sm" color={labelColor}>In Progress</Text>
                       <Badge colorScheme="blue" fontSize="md" px={3} py={1}>
                         {stats['in-progress']}
                       </Badge>
                     </Box>
                     <Box display="flex" flexDirection="column" gap={1}>
-                      <Text fontSize="sm" color="gray.600">Done</Text>
+                      <Text fontSize="sm" color={labelColor}>Done</Text>
                       <Badge colorScheme="green" fontSize="md" px={3} py={1}>
                         {stats.done}
                       </Badge>
@@ -148,10 +155,10 @@ const TaskDashboard: React.FC = () => {
             {/* Task List */}
             <Box>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-                <Text fontSize="lg" fontWeight="semibold" color="gray.700">
+                <Text fontSize="lg" fontWeight="semibold" color={textColor}>
                   Tasks ({stats.total})
                 </Text>
-                <Text fontSize="sm" color="gray.500">
+                <Text fontSize="sm" color={labelColor}>
                   {viewMode === 'grid' ? 'Grid View' : 'List View'}
                 </Text>
               </Box>
