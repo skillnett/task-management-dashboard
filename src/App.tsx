@@ -1,16 +1,15 @@
-import { Button, Container, HStack } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
+import { Provider } from "react-redux";
+import { store } from "./store";
 import { TaskDashboard } from "./components/TaskDashboard";
 
 function App() {
   return (
-    <Container py={[4, 8, 12]}>
-      <HStack>
-        <Button>Click me</Button>
-        <Button>Click me</Button>
-      </HStack>
-
-      <TaskDashboard />
-    </Container>
+    <Provider store={store}>
+      <Container py={[4, 8, 12]}>
+        <TaskDashboard />
+      </Container>
+    </Provider>
   );
 }
 
