@@ -1,16 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from './sagas/rootSaga';
-import tasksReducer from './slices/tasksSlice';
+import rootReducer from './rootReducer';
+import rootSaga from './rootSaga';
 
 // Create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
 // Configure the store
 export const store = configureStore({
-  reducer: {
-    tasks: tasksReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       thunk: false, // Disable thunk since we're using saga

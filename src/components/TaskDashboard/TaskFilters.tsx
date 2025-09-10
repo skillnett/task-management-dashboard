@@ -1,0 +1,122 @@
+import React, { useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Text,
+} from '@chakra-ui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectFilters, selectUniqueAssignees } from '../../features/tasks/tasksSelectors';
+import { setFilter, clearFilters } from '../../features/tasks/tasksSlice';
+
+const TaskFilters: React.FC = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector(selectFilters);
+  const assignees = useSelector(selectUniqueAssignees);
+  const bgColor = 'white';
+  const borderColor = 'gray.200';
+
+  // Debounced filter change effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      dispatch({ type: 'DEBOUNCED_FETCH_TASKS', payload: filters });
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [filters, dispatch]);
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setFilter({ status: e.target.value }));
+  };
+
+  const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch(setFilter({ assignee: e.target.value }));
+  };
+
+  const handleClearFilters = () => {
+    dispatch(clearFilters());
+  };
+
+  const hasActiveFilters = filters.status || filters.assignee;
+
+  return (
+    <Box
+      bg={bgColor}
+      p={6}
+      borderRadius="lg"
+      borderWidth="1px"
+      borderColor={borderColor}
+      boxShadow="sm"
+    >
+      <Box display="flex" flexDirection="column" gap={4}>
+        <Text fontSize="lg" fontWeight="semibold" color="gray.700">
+          Filter Tasks
+        </Text>
+        
+        <Box display="flex" gap={4} flexWrap="wrap">
+          <Box minW="200px">
+            <Text fontSize="sm" fontWeight="medium" mb={2} color="gray.600">
+              Status
+            </Text>
+            <select
+              value={filters.status}
+              onChange={handleStatusChange}
+              style={{
+                padding: '8px 12px',
+                fontSize: '14px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '6px',
+                backgroundColor: 'white',
+                width: '100%'
+              }}
+            >
+              <option value="">All statuses</option>
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </Box>
+
+          <Box minW="200px">
+            <Text fontSize="sm" fontWeight="medium" mb={2} color="gray.600">
+              Assignee
+            </Text>
+            <select
+              value={filters.assignee}
+              onChange={handleAssigneeChange}
+              style={{
+                padding: '8px 12px',
+                fontSize: '14px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '6px',
+                backgroundColor: 'white',
+                width: '100%'
+              }}
+            >
+              <option value="">All assignees</option>
+              {assignees.map((assignee) => (
+                <option key={assignee} value={assignee}>
+                  {assignee}
+                </option>
+              ))}
+            </select>
+          </Box>
+
+          {hasActiveFilters && (
+            <Box alignSelf="end">
+              <Button
+                size="sm"
+                variant="outline"
+                colorScheme="gray"
+                onClick={handleClearFilters}
+              >
+                Clear Filters
+              </Button>
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default TaskFilters;

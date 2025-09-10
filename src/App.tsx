@@ -1,14 +1,16 @@
-import { Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { TaskDashboard } from "./components/TaskDashboard";
+import TaskDashboard from "./components/TaskDashboard/TaskDashboard";
+import FixedTaskCounter from "./components/TaskDashboard/TaskCounter";
 
 function App() {
   return (
     <Provider store={store}>
-      <Container py={[4, 8, 12]}>
+      <Box>
         <TaskDashboard />
-      </Container>
+        <FixedTaskCounter />
+      </Box>
     </Provider>
   );
 }

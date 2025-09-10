@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Toaster as ChakraToaster,
   Portal,
@@ -18,7 +16,7 @@ export const Toaster = () => {
   return (
     <Portal>
       <ChakraToaster toaster={toaster} insetInline={{ mdDown: "4" }}>
-        {(toast: any) => (
+        {(toast) => (
           <Toast.Root width={{ md: "sm" }}>
             {toast.type === "loading" ? (
               <Spinner size="sm" color="blue.solid" />
