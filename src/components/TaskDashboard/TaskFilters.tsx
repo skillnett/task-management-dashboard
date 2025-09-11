@@ -1,32 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
+import { Box, Button, Text } from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  Box,
-  Button,
-  Text,
-} from '@chakra-ui/react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectFilters, selectUniqueAssignees } from '../../features/tasks/tasksSelectors';
-import { setFilter, clearFilters } from '../../features/tasks/tasksSlice';
-import { useColorModeValue } from '../ui/color-mode';
+  selectFilters,
+  selectUniqueAssignees,
+} from "../../features/tasks/tasksSelectors";
+import { setFilter, clearFilters } from "../../features/tasks/tasksSlice";
+import { useColorModeValue } from "../ui/color-mode";
 
 const TaskFilters: React.FC = () => {
   const dispatch = useDispatch();
   const filters = useSelector(selectFilters);
   const assignees = useSelector(selectUniqueAssignees);
-  
+
   // Color mode values
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const textColor = useColorModeValue('gray.700', 'gray.200');
-  const labelColor = useColorModeValue('gray.600', 'gray.300');
-  const selectBgColor = useColorModeValue('white', 'gray.700');
-  const selectBorderColor = useColorModeValue('#e2e8f0', '#4a5568');
-  const selectTextColor = useColorModeValue('gray.900', 'gray.100');
+  const bgColor = useColorModeValue("white", "gray.800");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const textColor = useColorModeValue("gray.700", "gray.200");
+  const labelColor = useColorModeValue("gray.600", "gray.300");
 
   // Debounced filter change effect
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      dispatch({ type: 'DEBOUNCED_FETCH_TASKS', payload: filters });
+      dispatch({ type: "DEBOUNCED_FETCH_TASKS", payload: filters });
     }, 300);
 
     return () => clearTimeout(timeoutId);
@@ -59,7 +55,7 @@ const TaskFilters: React.FC = () => {
         <Text fontSize="lg" fontWeight="semibold" color={textColor}>
           Filter Tasks
         </Text>
-        
+
         <Box display="flex" gap={4} flexWrap="wrap">
           <Box minW="200px">
             <Text fontSize="sm" fontWeight="medium" mb={2} color={labelColor}>
@@ -69,14 +65,14 @@ const TaskFilters: React.FC = () => {
               value={filters.status}
               onChange={handleStatusChange}
               style={{
-                padding: '8px 12px',
-                fontSize: '14px',
-                border: `1px solid ${selectBorderColor}`,
-                borderRadius: '6px',
-                backgroundColor: selectBgColor,
-                color: selectTextColor,
-                width: '100%'
+                padding: "8px 12px",
+                fontSize: "14px",
+                border: "0.5px solid",
+                borderColor,
+                borderRadius: "6px",
+                width: "100%",
               }}
+              className="task-select"
             >
               <option value="">All statuses</option>
               <option value="todo">To Do</option>
@@ -93,14 +89,14 @@ const TaskFilters: React.FC = () => {
               value={filters.assignee}
               onChange={handleAssigneeChange}
               style={{
-                padding: '8px 12px',
-                fontSize: '14px',
-                border: `1px solid ${selectBorderColor}`,
-                borderRadius: '6px',
-                backgroundColor: selectBgColor,
-                color: selectTextColor,
-                width: '100%'
+                padding: "8px 12px",
+                fontSize: "14px",
+                borderRadius: "6px",
+                border: "0.5px solid",
+                borderColor,
+                width: "100%",
               }}
+              className="task-select"
             >
               <option value="">All assignees</option>
               {assignees.map((assignee) => (
