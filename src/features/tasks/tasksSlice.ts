@@ -49,24 +49,33 @@ const tasksSlice = createSlice({
     
     // Update task status actions
     updateTaskStatusRequest: (state, action: PayloadAction<{taskId: number, newStatus: Task['status'], originalStatus: Task['status']}>) => {
-      const task = state.tasks.find(t => t.id === action.payload.taskId);
-      if (task) {
-        task.status = action.payload.newStatus;
-        task.isUpdating = true;
+      const taskIndex = state.tasks.findIndex(t => t.id === action.payload.taskId);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex] = {
+          ...state.tasks[taskIndex],
+          status: action.payload.newStatus,
+          isUpdating: true
+        };
       }
     },
     updateTaskStatusSuccess: (state, action: PayloadAction<Task>) => {
-      const task = state.tasks.find(t => t.id === action.payload.id);
-      if (task) {
-        task.status = action.payload.status;
-        task.isUpdating = false;
+      const taskIndex = state.tasks.findIndex(t => t.id === action.payload.id);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex] = {
+          ...state.tasks[taskIndex],
+          status: action.payload.status,
+          isUpdating: false
+        };
       }
     },
     updateTaskStatusFailure: (state, action: PayloadAction<{taskId: number, originalStatus: Task['status'], error: string}>) => {
-      const task = state.tasks.find(t => t.id === action.payload.taskId);
-      if (task) {
-        task.status = action.payload.originalStatus;
-        task.isUpdating = false;
+      const taskIndex = state.tasks.findIndex(t => t.id === action.payload.taskId);
+      if (taskIndex !== -1) {
+        state.tasks[taskIndex] = {
+          ...state.tasks[taskIndex],
+          status: action.payload.originalStatus,
+          isUpdating: false
+        };
       }
       state.error = action.payload.error;
     },
@@ -74,11 +83,9 @@ const tasksSlice = createSlice({
     // Filter actions
     setFilter: (state, action: PayloadAction<Partial<{status: string, assignee: string}>>) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.filterLoading = true;
     },
     clearFilters: (state) => {
       state.filters = { status: '', assignee: '' };
-      state.filterLoading = true;
     },
     setFilterLoading: (state, action: PayloadAction<boolean>) => {
       state.filterLoading = action.payload;

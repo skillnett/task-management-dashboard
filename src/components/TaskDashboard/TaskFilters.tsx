@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -18,15 +18,6 @@ const TaskFilters: React.FC = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textColor = useColorModeValue("gray.700", "gray.200");
   const labelColor = useColorModeValue("gray.600", "gray.300");
-
-  // Debounced filter change effect
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      dispatch({ type: "DEBOUNCED_FETCH_TASKS", payload: filters });
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [filters, dispatch]);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setFilter({ status: e.target.value }));

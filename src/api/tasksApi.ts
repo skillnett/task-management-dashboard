@@ -58,8 +58,8 @@ export const tasksAPI = {
         }
         const task = MOCK_TASKS.find(t => t.id === taskId);
         if (task) {
-          task.status = newStatus;
-          resolve({ ...task });
+          const updatedTask = { ...task, status: newStatus };
+          resolve(updatedTask);
         } else {
           reject(new Error('Task not found'));
         }

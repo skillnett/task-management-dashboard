@@ -5,7 +5,6 @@ import {
   fetchTasksRequest,
   fetchTasksSuccess,
   fetchTasksFailure,
-  updateTaskStatusRequest,
   updateTaskStatusSuccess,
   updateTaskStatusFailure,
   incrementRetryCount,
@@ -46,17 +45,9 @@ function* fetchTasksSaga(action: { type: string; payload?: TaskFilters }) {
 
 // Update task status saga with optimistic updates
 function* updateTaskStatusSaga(action: { type: string; payload: { taskId: number; newStatus: Task['status']; originalStatus: Task['status'] } }) {
-  const { taskId, newStatus } = action.payload;
+  const { taskId, newStatus, originalStatus } = action.payload;
   
   try {
-    // Get current task for rollback
-    const tasks: Task[] = yield select((state: RootState) => state.tasks.tasks);
-    const currentTask = tasks.find(t => t.id === taskId);
-    const originalStatus = currentTask ? currentTask.status : null;
-    
-    // Optimistic update
-    yield put(updateTaskStatusRequest({ taskId, newStatus, originalStatus: originalStatus! }));
-    
     // API call
     const updatedTask: Task = yield call(tasksAPI.updateTaskStatus, taskId, newStatus);
     
@@ -67,7 +58,7 @@ function* updateTaskStatusSaga(action: { type: string; payload: { taskId: number
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     yield put(updateTaskStatusFailure({
       taskId,
-      originalStatus: action.payload.originalStatus,
+      originalStatus: originalStatus,
       error: errorMessage
     }));
   }
