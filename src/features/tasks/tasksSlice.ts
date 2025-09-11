@@ -4,6 +4,7 @@ import { Task } from '../../api/tasksApi';
 export interface TasksState {
   tasks: Task[];
   loading: boolean;
+  filterLoading: boolean;
   error: string | null;
   filters: {
     status: string;
@@ -15,6 +16,7 @@ export interface TasksState {
 const initialState: TasksState = {
   tasks: [],
   loading: false,
+  filterLoading: false,
   error: null,
   filters: {
     status: '',
@@ -34,12 +36,14 @@ const tasksSlice = createSlice({
     },
     fetchTasksSuccess: (state, action: PayloadAction<Task[]>) => {
       state.loading = false;
+      state.filterLoading = false;
       state.tasks = action.payload;
       state.error = null;
       state.retryCount = 0;
     },
     fetchTasksFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
+      state.filterLoading = false;
       state.error = action.payload;
     },
     
@@ -70,9 +74,14 @@ const tasksSlice = createSlice({
     // Filter actions
     setFilter: (state, action: PayloadAction<Partial<{status: string, assignee: string}>>) => {
       state.filters = { ...state.filters, ...action.payload };
+      state.filterLoading = true;
     },
     clearFilters: (state) => {
       state.filters = { status: '', assignee: '' };
+      state.filterLoading = true;
+    },
+    setFilterLoading: (state, action: PayloadAction<boolean>) => {
+      state.filterLoading = action.payload;
     },
     
     // Error handling
@@ -99,6 +108,7 @@ export const {
   updateTaskStatusFailure,
   setFilter,
   clearFilters,
+  setFilterLoading,
   clearError,
   incrementRetryCount,
   resetRetryCount

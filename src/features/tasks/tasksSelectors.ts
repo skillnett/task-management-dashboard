@@ -43,6 +43,11 @@ export const selectIsLoading = createSelector(
   (tasksState) => tasksState.loading
 );
 
+export const selectIsFilterLoading = createSelector(
+  [selectTasksState],
+  (tasksState) => tasksState.filterLoading
+);
+
 export const selectError = createSelector(
   [selectTasksState],
   (tasksState) => tasksState.error
@@ -68,6 +73,11 @@ export const selectFilteredTasks = createSelector(
     
     return filtered;
   }
+);
+
+export const selectFilteredTasksCount = createSelector(
+  [selectFilteredTasks],
+  (filteredTasks) => filteredTasks.length
 );
 
 export const selectUniqueAssignees = createSelector(

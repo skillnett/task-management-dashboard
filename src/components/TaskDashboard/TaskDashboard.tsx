@@ -9,7 +9,7 @@ import {
   Badge
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTaskStats, selectError } from '../../features/tasks/tasksSelectors';
+import { selectTaskStats, selectError, selectFilteredTasksCount } from '../../features/tasks/tasksSelectors';
 import { fetchTasksRequest, clearError } from '../../features/tasks/tasksSlice';
 import TaskFilters from './TaskFilters';
 import TaskList from './TaskList';
@@ -20,6 +20,7 @@ const TaskDashboard: React.FC = () => {
   const dispatch = useDispatch();
   const stats = useSelector(selectTaskStats);
   const error = useSelector(selectError);
+  const filteredTasksCount = useSelector(selectFilteredTasksCount);
   
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showStats, setShowStats] = useState(false);
@@ -156,7 +157,7 @@ const TaskDashboard: React.FC = () => {
             <Box>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
                 <Text fontSize="lg" fontWeight="semibold" color={textColor}>
-                  Tasks ({stats.total})
+                  Tasks ({filteredTasksCount})
                 </Text>
                 <Text fontSize="sm" color={labelColor}>
                   {viewMode === 'grid' ? 'Grid View' : 'List View'}

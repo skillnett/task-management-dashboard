@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   selectFilteredTasks,
   selectIsLoading,
+  selectIsFilterLoading,
   selectError,
 } from "../../features/tasks/tasksSelectors";
 import { fetchTasksRequest } from "../../features/tasks/tasksSlice";
@@ -25,13 +26,14 @@ const TaskList: FC<TaskListProps> = ({ viewMode = "grid" }) => {
   const dispatch = useDispatch();
   const tasks = useSelector(selectFilteredTasks);
   const loading = useSelector(selectIsLoading);
+  const filterLoading = useSelector(selectIsFilterLoading);
   const error = useSelector(selectError);
 
   const handleRetry = () => {
     dispatch(fetchTasksRequest());
   };
 
-  if (loading) {
+  if (loading || filterLoading) {
     return (
       <Box>
         {viewMode === "grid" ? (
