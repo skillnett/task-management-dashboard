@@ -6,18 +6,20 @@ import {
   selectUniqueAssignees,
 } from "../../features/tasks/tasksSelectors";
 import { setFilter, clearFilters } from "../../features/tasks/tasksSlice";
-import { useColorModeValue } from "../ui/color-mode";
+import { useTheme } from "next-themes";
 
   const TaskFilters: React.FC = () => {
     const dispatch = useDispatch();
     const filters = useSelector(selectFilters);
     const assignees = useSelector(selectUniqueAssignees);
+    const { theme } = useTheme();
 
-  // Color mode values
-  const bgColor = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const textColor = useColorModeValue("gray.700", "gray.200");
-  const labelColor = useColorModeValue("gray.600", "gray.300");
+    // Color mode values
+    const isDark = theme === 'dark';
+    const bgColor = isDark ? "gray.800" : "white";
+    const borderColor = isDark ? "gray.600" : "gray.200";
+    const textColor = isDark ? "gray.200" : "gray.700";
+    const labelColor = isDark ? "gray.300" : "gray.600";
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setFilter({ status: e.target.value }));

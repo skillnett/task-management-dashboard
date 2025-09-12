@@ -15,7 +15,7 @@ import {
   selectError,
 } from "../../features/tasks/tasksSelectors";
 import { fetchTasksRequest } from "../../features/tasks/tasksSlice";
-import TaskCard from "./TaskCard";
+import AnimatedTaskCard from "./AnimatedTaskCard";
 
 interface TaskListProps {
   viewMode?: "grid" | "list";
@@ -96,14 +96,14 @@ const TaskList: FC<TaskListProps> = ({ viewMode = "grid" }) => {
       {viewMode === "grid" ? (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <AnimatedTaskCard key={task.id} task={task} layoutId={`task-${task.id}`} />
           ))}
         </SimpleGrid>
       ) : (
         <Stack gap={4}>
           {tasks.map((task) => (
             <Box key={task.id} w="100%">
-              <TaskCard task={task} />
+              <AnimatedTaskCard task={task} layoutId={`task-${task.id}`} />
             </Box>
           ))}
         </Stack>

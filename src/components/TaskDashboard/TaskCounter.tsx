@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { Box, Text, Button, VStack, Badge } from "@chakra-ui/react";
+import { Box, Text, VStack, Badge } from "@chakra-ui/react";
 import { selectAllTasks, selectTaskStats } from "../../features/tasks/tasksSelectors";
 import { Task } from "../../api/tasksApi";
-import { useColorModeValue } from "../ui/color-mode";
+import { useTheme } from "next-themes";
 
 const TaskCounter: React.FC = () => {
   const tasks = useSelector(selectAllTasks);
   const stats = useSelector(selectTaskStats);
-  const [count, setCount] = useState(0);
-  
+  const { theme } = useTheme();
+
   // Color mode values
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const textColor = useColorModeValue('gray.700', 'gray.200');
-  const labelColor = useColorModeValue('gray.600', 'gray.300');
+  const isDark = theme === 'dark';
+  const bgColor = isDark ? 'gray.800' : 'white';
+  const borderColor = isDark ? 'gray.600' : 'gray.200';
+  const textColor = isDark ? 'gray.200' : 'gray.700';
+  const labelColor = isDark ? 'gray.300' : 'gray.600';
 
-  useEffect(() => {
-    setCount(tasks.length);
-  }, [tasks.length]);
 
-  const incrementCount = () => {
-    setCount((prevCount) => prevCount + 1);
-  };
 
   return (
     <Box p={4} border="1px" borderColor={borderColor} borderRadius="md" bg={bgColor}>
@@ -59,9 +54,6 @@ const TaskCounter: React.FC = () => {
           </Box>
         </Box>
 
-        <Button onClick={incrementCount} size="sm" colorScheme="blue">
-          Add Manual Count
-        </Button>
         <VStack align="start" gap={1}>
           <Text fontSize="sm" fontWeight="medium" color={textColor}>
             Task Titles:

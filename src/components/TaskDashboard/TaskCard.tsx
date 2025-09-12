@@ -3,7 +3,7 @@ import { Box, Heading, Text, Badge, Spinner } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { updateTaskStatusRequest } from "../../features/tasks/tasksSlice";
 import { Task } from "../../api/tasksApi";
-import { useColorModeValue } from "../ui/color-mode";
+import { useTheme } from "next-themes";
 
 interface TaskCardProps {
   task: Task;
@@ -11,13 +11,15 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const dispatch = useDispatch();
+  const { theme } = useTheme();
 
   // Color mode values
-  const cardBg = useColorModeValue("white", "gray.800");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const textColor = useColorModeValue("gray.700", "gray.200");
-  const labelColor = useColorModeValue("gray.600", "gray.300");
-  const dividerColor = useColorModeValue("gray.200", "gray.600");
+  const isDark = theme === 'dark';
+  const cardBg = isDark ? "gray.800" : "white";
+  const borderColor = isDark ? "gray.600" : "gray.200";
+  const textColor = isDark ? "gray.200" : "gray.700";
+  const labelColor = isDark ? "gray.300" : "gray.600";
+  const dividerColor = isDark ? "gray.600" : "gray.200";
 
   const getPriorityColor = (priority: Task["priority"]): string => {
     const colors: Record<Task["priority"], string> = {
