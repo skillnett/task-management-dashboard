@@ -9,7 +9,7 @@ import {
   Badge
 } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTaskStats, selectError, selectFilteredTasksCount } from '../../features/tasks/tasksSelectors';
+import { selectTaskStats, selectError, selectFilteredTasksCount, selectAllTasks, selectIsLoading } from '../../features/tasks/tasksSelectors';
 import { fetchTasksRequest, clearError } from '../../features/tasks/tasksSlice';
 import TaskFilters from './TaskFilters';
 import TaskList from './TaskList';
@@ -21,11 +21,16 @@ const TaskDashboard: React.FC = () => {
   const stats = useSelector(selectTaskStats);
   const error = useSelector(selectError);
   const filteredTasksCount = useSelector(selectFilteredTasksCount);
+  const tasks = useSelector(selectAllTasks);
+  const loading = useSelector(selectIsLoading);
   
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showStats, setShowStats] = useState(false);
-  const { colorMode, toggleColorMode } = useColorMode();
-  const toggleStats = () => setShowStats(!showStats);
+  
+  // Always call hooks at the top level - handle errors in the hook implementation
+  const colorModeResult = useColorMode();
+  const colorMode = colorModeResult?.colorMode || 'light';
+  const toggleColorMode = colorModeResult?.toggleColorMode || (() => {});
   
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const headerBg = useColorModeValue('white', 'gray.800');
@@ -34,9 +39,14 @@ const TaskDashboard: React.FC = () => {
   const dividerColor = useColorModeValue('gray.200', 'gray.600');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
+  const toggleStats = () => setShowStats(!showStats);
+
   useEffect(() => {
-    dispatch(fetchTasksRequest());
-  }, [dispatch]);
+    // Only fetch tasks if we don't have any tasks and we're not already loading
+    if (tasks.length === 0 && !loading) {
+      dispatch(fetchTasksRequest());
+    }
+  }, [dispatch, tasks.length, loading]);
 
   const handleViewModeToggle = () => {
     setViewMode(prev => prev === 'grid' ? 'list' : 'grid');

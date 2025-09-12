@@ -77,7 +77,8 @@ const tasksSlice = createSlice({
           isUpdating: false
         };
       }
-      state.error = action.payload.error;
+      // Don't set global error for individual task updates - this would hide the task list
+      // Individual task errors should be handled at the task level or via notifications
     },
     
     // Filter actions

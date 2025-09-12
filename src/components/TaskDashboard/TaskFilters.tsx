@@ -8,10 +8,10 @@ import {
 import { setFilter, clearFilters } from "../../features/tasks/tasksSlice";
 import { useColorModeValue } from "../ui/color-mode";
 
-const TaskFilters: React.FC = () => {
-  const dispatch = useDispatch();
-  const filters = useSelector(selectFilters);
-  const assignees = useSelector(selectUniqueAssignees);
+  const TaskFilters: React.FC = () => {
+    const dispatch = useDispatch();
+    const filters = useSelector(selectFilters);
+    const assignees = useSelector(selectUniqueAssignees);
 
   // Color mode values
   const bgColor = useColorModeValue("white", "gray.800");
@@ -49,10 +49,11 @@ const TaskFilters: React.FC = () => {
 
         <Box display="flex" gap={4} flexWrap="wrap">
           <Box minW="200px">
-            <Text fontSize="sm" fontWeight="medium" mb={2} color={labelColor}>
+            <label htmlFor="status-filter" style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: labelColor, display: 'block' }}>
               Status
-            </Text>
+            </label>
             <select
+              id="status-filter"
               value={filters.status}
               onChange={handleStatusChange}
               style={{
@@ -73,10 +74,11 @@ const TaskFilters: React.FC = () => {
           </Box>
 
           <Box minW="200px">
-            <Text fontSize="sm" fontWeight="medium" mb={2} color={labelColor}>
+            <label htmlFor="assignee-filter" style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: labelColor, display: 'block' }}>
               Assignee
-            </Text>
+            </label>
             <select
+              id="assignee-filter"
               value={filters.assignee}
               onChange={handleAssigneeChange}
               style={{
@@ -99,7 +101,7 @@ const TaskFilters: React.FC = () => {
           </Box>
 
           {hasActiveFilters && (
-            <Box alignSelf="end">
+            <Box alignSelf="flex-end">
               <Button
                 size="sm"
                 variant="outline"

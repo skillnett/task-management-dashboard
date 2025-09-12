@@ -21,7 +21,7 @@ function getRetryDelay(retryCount: number): number {
 }
 
 // Fetch tasks saga with retry logic
-function* fetchTasksSaga(action: { type: string; payload?: TaskFilters }) {
+export function* fetchTasksSaga(action: { type: string; payload?: TaskFilters }) {
   const retryCount: number = yield select((state: RootState) => state.tasks.retryCount);
   
   try {
@@ -44,7 +44,7 @@ function* fetchTasksSaga(action: { type: string; payload?: TaskFilters }) {
 }
 
 // Update task status saga with optimistic updates
-function* updateTaskStatusSaga(action: { type: string; payload: { taskId: number; newStatus: Task['status']; originalStatus: Task['status'] } }) {
+export function* updateTaskStatusSaga(action: { type: string; payload: { taskId: number; newStatus: Task['status']; originalStatus: Task['status'] } }) {
   const { taskId, newStatus, originalStatus } = action.payload;
   
   try {
